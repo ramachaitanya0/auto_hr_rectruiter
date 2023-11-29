@@ -66,16 +66,19 @@ def get_feature_df(target_dir: str)->pd.DataFrame:
     df.Key_Skills = df.Key_Skills.astype(str)
     return df
 @st.cache_resource
-def get_vector_store(df:pd.DataFrame):
+def get_vector_store(df:pd.DataFrame,vector_db_dir:str):
     docs = DataFrameLoader(df, page_content_column="Summary").load()
     embeddings = OpenAIEmbeddings()
-    vectorstore = Chroma.from_documents(docs, embeddings)
+    vectorstore = Chroma.from_documents(docs, embeddings,persist_directory=vector_db_dir)
+    vectorstore.persist()
     print("Successfully Created Vector Store")
     return vectorstore
 
-
-def get_matching_profiles(job_description: str, vectorstore) -> pd.DataFrame:
+@st.cache_data
+def get_matching_profiles(job_description: str, vector_db_dir:str) -> pd.DataFrame:
     list_of_dfs = []
+    embeddings = OpenAIEmbeddings()
+    vectorstore = Chroma( persist_directory=vector_db_dir,embedding_function=embeddings)
     matching_profiles = vectorstore.as_retriever().invoke(job_description)
     print("Successfully generated Matching Profiles")
     for profile in matching_profiles:
