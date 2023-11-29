@@ -9,6 +9,7 @@ from langchain.document_loaders import DataFrameLoader
 from langchain.vectorstores import Chroma
 import  os
 import streamlit as st
+import docx
 
 def get_data_from_resume_text(text)->pd.DataFrame:
   class Applicant(BaseModel):
@@ -49,9 +50,15 @@ def get_feature_df(target_dir: str)->pd.DataFrame:
     list_of_dfs = []
     for file in os.listdir(target_dir):
         text = ""
-        reader = PdfReader(target_dir + '/' + file)
-        for page in reader.pages:
-            text += page.extract_text()
+        if file.endswith(".pdf"):
+            reader = PdfReader(target_dir + '/' + file)
+            for page in reader.pages:
+                text += page.extract_text()
+
+        if file.endswith(".docx"):
+            reader = docx.Document(target_dir + '/' + file)
+            for page in reader.paragraphs:
+                text += page.text
 
         list_of_dfs.append(get_data_from_resume_text(text))
     print("Read all the files and created meta data for all the resumes")
