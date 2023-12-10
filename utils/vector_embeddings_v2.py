@@ -61,11 +61,12 @@ def get_feature_df(target_dir: str)->pd.DataFrame:
     print("Read all the files and created meta data for all the resumes")
     df =  pd.concat(list_of_dfs, axis=0)
     df.Key_Skills = df.Key_Skills.astype(str)
-    df.to_csv("./data/all_applicants.csv")
+    df = df[["Applicant_Name","years_of_exp","Key_Skills","Linkedin_Profile","GitHub_Profile","Mail_Id","Summary"]]
+    df.to_excel("./data/all_applicants.xlsx")
     return 1
 @st.cache_resource
 def get_vector_store(vector_db_dir:str):
-    df = pd.read_csv("./data/all_applicants.csv")
+    df = pd.read_excel("./data/all_applicants.xlsx")
     docs = DataFrameLoader(df, page_content_column="Summary").load()
     with get_openai_callback() as cr :
         embeddings = OpenAIEmbeddings(deployment="ada-002")
@@ -89,4 +90,5 @@ def get_matching_profiles(job_description: str, vector_db_dir:str) -> pd.DataFra
     for profile in matching_profiles:
         list_of_dfs.append(pd.DataFrame.from_dict(profile.metadata, orient='index').T)
 
-    return pd.concat(list_of_dfs, axis=0)
+    df = pd.concat(list_of_dfs, axis=0)[["Applicant_Name","years_of_exp","Key_Skills","Linkedin_Profile","GitHub_Profile","Mail_Id"]]
+    return df

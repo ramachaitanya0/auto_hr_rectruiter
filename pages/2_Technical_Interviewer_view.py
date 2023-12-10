@@ -29,10 +29,11 @@ if submit :
     st.session_state['get_matching_profiles_button'] = 1
 
 if st.session_state['get_matching_profiles_button']:
-    df = pd.read_csv("data/matching_profiles.csv")
+    df = pd.read_excel("data/matching_profiles.xlsx")
     selection = dataframe_with_selections(df)
-    st.write("Select the Applicatnts:")
-    st.dataframe(selection)
+    selection[["Applicant_Name","years_of_exp","Key_Skills","Linkedin_Profile","GitHub_Profile","Mail_Id"]].to_excel("data/technical_filtered.xlsx")
+    st.write("Select the Applicants:")
+    st.dataframe(selection[["Applicant_Name","years_of_exp","Key_Skills","Linkedin_Profile","GitHub_Profile","Mail_Id"]])
 
 
 

@@ -40,17 +40,17 @@ if "clean_previous_session_data" not in st.session_state :
 
 if "created_all_applicants_df" not in st.session_state :
     st.session_state['created_all_applicants_df']=1
-    df = pd.read_csv("data/all_applicants.csv")
+    df = pd.read_excel("data/all_applicants.xlsx")
     df = df.iloc[0:0]
-    df.to_csv("./data/all_applicants.csv")
+    df.to_excel("./data/all_applicants.xlsx")
 
-    df1 = pd.read_csv("./data/technical_filtered.csv")
+    df1 = pd.read_excel("data/technical_filtered.xlsx")
     df1 = df1.iloc[0:0]
-    df1.to_csv("./data/technical_filtered.csv")
+    df1.to_excel("./data/technical_filtered.xlsx")
 
-    df2 = pd.read_csv("./data/matching_profiles.csv")
+    df2 = pd.read_excel("data/matching_profiles.xlsx")
     df2 = df2.iloc[0:0]
-    df2.to_csv("./data/matching_profiles.csv")
+    df2.to_excel("./data/matching_profiles.xlsx")
 
 # # Title
 # st.title("HR Recruiting Assistant")
