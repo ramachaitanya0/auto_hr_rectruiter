@@ -1,4 +1,4 @@
-# Auto HR Recruiter
+#  IntelliHire
 
  This Application is designed to streamline the recruitment process for HR professionals.
  Leveraging advanced artificial intelligence, the app allows recruiters to effortlessly 
@@ -10,6 +10,9 @@ Key Features
 1. Document upload capability.
 2. Interactive and user-friendly chat interface
 3. Automated Recommendations
+4. You can Check the Amount Spent in Each Session 
+5. You can Generate Job Description based on your company requirement
+6. You can Generate Question and Answers based on the Required Role , Experience Level etc.
 
 # Installation
 

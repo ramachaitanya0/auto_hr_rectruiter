@@ -1,58 +1,98 @@
+import pandas as pd
 import streamlit as st
-import os
-
+import os , shutil
+import numpy as np
 from dotenv import  load_dotenv
 from utils.data_processing import  *
-from utils.vector_embeddings import  *
+from utils.vector_embeddings_v2 import  *
 from utils.hr_message import *
 
 load_dotenv()
 TARGET_DIR="./uploaded_data"
 VECTOR_DB_DIR="./docs/chroma"
-st.title("Auto HR Recruiter")
-st.header("Upload Files",divider='rainbow')
-uploaded_files = st.file_uploader("Upload your files",type=['pdf','docx'],accept_multiple_files=True)
+st.title("IntelliHire")
 
-if "get_matching_profiles_button" not in st.session_state :
-    st.session_state['get_matching_profiles_button'] = 0
+def delete_folder(folder_path):
+    try:
+        if os.path.isdir(folder_path) :
+            # os.rmdir(folder_path)
+            shutil.rmtree(folder_path)
+    except Exception as e:
+        st.error(f"Error deleting folder {folder_path}: {e}")
 
-if len(uploaded_files) > 0 :
-    val = store_uploaded_files(uploaded_files,target_dir=TARGET_DIR)
-    feature_df = get_feature_df(target_dir=TARGET_DIR)
-    vector_store = get_vector_store(feature_df,VECTOR_DB_DIR)
+if "Amount_Spent" not in st.session_state :
+    st.session_state["Amount_Spent"] = 0.0
 
+amount_spent_submit = st.sidebar.button("Get Amount Spent")
+if amount_spent_submit :
+    amount_spent_in_rupees = np.float64(st.session_state.Amount_Spent) * 80
+    amount_spent = st.sidebar.empty()
+    amount_spent.text(f"""
+    Amount spent in Dollars is ${st.session_state.Amount_Spent} 
+    Amount spent in Rupees is Rs.{amount_spent_in_rupees}
+""")
 
-st.header("Profile Matcher",divider='blue')
-job_description = st.text_input("Enter Job Description Here")
-submit = st.button('Get Matching Profiles')
-
-if submit :
-    st.session_state['get_matching_profiles_button'] = 1
-
-if st.session_state['get_matching_profiles_button']:
-    df = get_matching_profiles(job_description, VECTOR_DB_DIR)
-    st.dataframe(df, width=1000)
-
-st.header("Send Automated Mails to Potential Candidates",divider='rainbow')
-cols = st.columns(3)
-with cols[0] :
-    job_position = st.text_input("Job Position")
-with cols[1] :
-    HR_Name = st.text_input("HR Name")
-with cols[2] :
-    test_link = st.text_input("Test URL")
+if "clean_previous_session_data" not in st.session_state :
+    st.session_state["clean_previous_session_data"] = 1
+    delete_folder("./docs/")
+    delete_folder("./uploaded_data/")
 
 
-send = st.button("Send Mails to Potential Candidates")
-if send :
-    for i in range(df.shape[0]):
-        email = df.loc[i,"Mail_Id"]
-        candidate_name = df.loc[i,"Applicant_Name"]
-        val = send_mail(reciever_mail=email,job_position=job_position,candidate_name=candidate_name,HR_Name=HR_Name,test_link=test_link)
+if "created_all_applicants_df" not in st.session_state :
+    st.session_state['created_all_applicants_df']=1
+    df = pd.read_csv("data/all_applicants.csv")
+    df = df.iloc[0:0]
+    df.to_csv("./data/all_applicants.csv")
 
-    print("Successfully sent mail to all the Potential Candidates ")
+    df1 = pd.read_csv("./data/technical_filtered.csv")
+    df1 = df1.iloc[0:0]
+    df1.to_csv("./data/technical_filtered.csv")
 
+    df2 = pd.read_csv("./data/matching_profiles.csv")
+    df2 = df2.iloc[0:0]
+    df2.to_csv("./data/matching_profiles.csv")
 
+# # Title
+# st.title("HR Recruiting Assistant")
+
+# Description
+st.markdown(
+    """
+    Welcome to the HR Recruiting Assistant! This application is designed to streamline and enhance the recruiting process at **TVS**, making it easier for HR professionals to manage applicants effectively.
+
+    ## Features
+
+    - **Profile Matching:** Easily fetch matching profiles based on job descriptions, ensuring a more efficient screening process.
+
+    - **Automated Emails:** Send automated emails to applicants based on their current stage in the recruitment process, keeping them informed and engaged.
+
+    - **Task Management:** Stay organized with built-in task management features to track the progress of each applicant through the hiring stages.
+
+    - **Data Visualization:** Gain insights into the recruitment pipeline with interactive charts and graphs, helping you make informed decisions.
+
+    ## How to Use
+
+    1. **Profile Matching:**
+       - Enter the job description details.
+       - Click on the "Fetch Matching Profiles" button to get a list of relevant candidates.
+
+    2. **Automated Emails:**
+       - Manage applicant stages using the sidebar.
+       - The system will automatically send emails based on predefined templates.
+
+    3. **Task Management:**
+       - Track tasks and milestones for each applicant.
+       - Update task status as you progress through the recruitment process.
+
+    4. **Data Visualization:**
+       - Explore visual representations of recruitment data to identify trends and areas for improvement.
+
+    ## Get Started
+    Ready to revolutionize your recruitment process? Start by exploring the features on the sidebar. If you have any questions, check out the documentation or reach out to our support team.
+
+    Happy recruiting!
+    """
+)
 
 
 
