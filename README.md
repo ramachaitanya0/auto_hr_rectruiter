@@ -1,5 +1,15 @@
 #  IntelliHire
 
+## Problem Statement
+
+The Recruitment Process in Organizations and its Challenges
+A typical recruitment process in organizations involves the following steps.
+![img.png](img.png)
+
+All these steps involves a lot of Man power, Our idea is to improve the effiency of hiring process in all the steps using Generative AI.
+
+## Solution 
+
  This Application is designed to streamline the recruitment process for HR professionals.
  Leveraging advanced artificial intelligence, the app allows recruiters to effortlessly 
  sift through stacks of resumes and identifies the most relevant candidates for a particular
@@ -10,9 +20,9 @@ Key Features
 1. Document upload capability.
 2. Interactive and user-friendly chat interface
 3. Automated Recommendations
-4. You can Check the Amount Spent in Each Session 
-5. You can Generate Job Description based on your company requirement
-6. You can Generate Question and Answers based on the Required Role , Experience Level etc.
+4. You can Generate Job Description based on your company requirement
+5. You can Generate Question and Answers based on the Required Role , Experience Level etc.
+6. You can Check the Amount Spent in Each Session 
 
 # Installation
 
@@ -47,8 +57,11 @@ MAIL_APP_PASSWORD=<your_maild_password>
 
 Run the Stream lit app using below code.
 ```sh
-streamlit run app.py
+streamlit run Home.py
 ```
 
+# Inspiration
+
+https://www.cmu.edu/intelligentbusiness/expertise/gen-ai-in-hiring_lee_100323.pdf
 
 

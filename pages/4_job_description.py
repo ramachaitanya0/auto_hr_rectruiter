@@ -1,7 +1,6 @@
 import streamlit as st
 from langchain.chat_models import  AzureChatOpenAI
 from langchain.callbacks import get_openai_callback
-from langchain.output_parsers import  StructuredOutputParser
 
 if "Amount_Spent" not in st.session_state :
     st.session_state["Amount_Spent"] = 0.0
