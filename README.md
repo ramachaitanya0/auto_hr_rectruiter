@@ -2,7 +2,6 @@
 
 ## Problem Statement
 
-The Recruitment Process in Organizations and its Challenges
 A typical recruitment process in organizations involves the following steps.
 ![img.png](img.png)
 
