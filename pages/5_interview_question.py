@@ -8,7 +8,17 @@ if "Amount_Spent" not in st.session_state :
     st.session_state["Amount_Spent"] = 0.0
 
 st.header("Get Question and Answers",divider='rainbow')
-qa_input =  st.text_input(label="Get Q&A")
+cols = st.columns(3)
+with cols[0] :
+    no_of_questions = st.number_input(label="Number of Questions",step=1)
+with cols[1] :
+    yoe = st.number_input(label="Years of Experience", step=1)
+with cols[2] :
+    selected_role = st.selectbox(label="Role",
+                                 options=['Software Development Engineer', 'Data Scientist', 'Data Engineer', 'QA Tester'])
+
+qa_input = f"""Write {no_of_questions} questions and its answers to ask an interview \
+candidate for {selected_role} role with {yoe} Years of Experience  """
 jd_button = st.button("Submit")
 
 
